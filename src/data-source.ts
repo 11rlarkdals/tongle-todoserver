@@ -1,15 +1,16 @@
 import { DataSource } from "typeorm";
-import User from "./entities/user";
+import { User } from "./entities/user";
 import { Todo } from "./entities/todo";
 import { Task } from "./entities/task";
 
 const AppDataSource = new DataSource({
   type: "postgres",
-  host: "localhost",
-  port: 5432,
-  username: "eshell",
-  password: "eshell",
-  database: "todos",
+  url: process.env.POSTGRES_DATABASE_URL,
+  // host: "localhost",
+  // port: 5432,
+  // username: process.env.USERNAME,
+  // password: process.env.PASSWORD,
+  // database: "todos",
   synchronize: true,
   logging: false,
   entities: [User, Todo, Task], // 엔티티를 추가합니다.

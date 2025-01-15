@@ -9,6 +9,7 @@ import {
 import bcrypt from "bcryptjs";
 import { Todo } from "./todo";
 import { Task } from "./task";
+import { convertImageUrlToBase64 } from "../utilities/convertImageUrlToBase64";
 
 export enum Gender {
   MALE = "male",
@@ -40,6 +41,9 @@ export class User extends BaseEntity {
   photoBase64: string;
 
   @Column({ nullable: true })
+  picture: string;
+
+  @Column({ nullable: true })
   address: string;
 
   @Column({ nullable: true })
@@ -49,13 +53,22 @@ export class User extends BaseEntity {
   gender: Gender;
 
   @BeforeInsert()
-  async hashPassword() {
+  async beforeInsert(): Promise<void> {
+    // 비밀번호 해시화
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+
+    // 이미지 변환
+    if (this.picture) {
+      const base64Image = await convertImageUrlToBase64(this.picture);
+      if (base64Image !== null) {
+        this.photoBase64 = base64Image;
+      }
+    }
   }
 
-  async comparePassword(enteredPassword: string): Promise<boolean> {
-    return await bcrypt.compare(enteredPassword, this.password);
+  async comparePASSWORD(enteredPASSWORD: string): Promise<boolean> {
+    return await bcrypt.compare(enteredPASSWORD, this.password);
   }
 }
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Todo } from "../entities/todo";
-import User from "../entities/user";
+import { User } from "../entities/user";
 import { Task } from "../entities/task";
 
 const createTodo = async (req: Request, res: Response) => {

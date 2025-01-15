@@ -8,7 +8,7 @@ import {
   ManyToOne,
 } from "typeorm";
 import { Todo } from "./todo";
-import User from "./user";
+import { User } from "./user";
 
 @Entity()
 export class Task extends BaseEntity {

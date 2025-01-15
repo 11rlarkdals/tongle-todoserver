@@ -1,7 +1,57 @@
 import { Request, Response } from "express";
-import User from "../entities/user";
+import { User } from "../entities/user";
 import jwt from "jsonwebtoken";
 import { redisClient } from "../redisClient";
+import { OAuth2Client } from "google-auth-library";
+
+const googleLogin = async (req: Request, res: Response) => {
+  const { credential } = req.body;
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) {
+      return res.status(400).json({ message: "Invalid token" });
+    }
+
+    console.log(payload);
+
+    const { email, name, picture } = payload;
+
+    // 기존 사용자 확인
+    let user = await User.findOneBy({ email });
+
+    if (!user) {
+      // 새 사용자 생성
+      user = new User();
+      user.email = email || "";
+      user.name = name || "";
+      user.password = Math.random().toString(36).slice(-8); // 임의 비밀번호
+      if (picture) {
+        user.picture = picture;
+      }
+      await user.save();
+    }
+
+    const token = jwt.sign({ id: user.id }, "your_jwt_secret", {
+      expiresIn: "7d",
+    });
+
+    await redisClient.set(token, String(user.id), {
+      EX: 10 * 60,
+    });
+
+    return res.json({ token });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error creating user", error });
+  }
+};
 
 const registerUser = async (req: Request, res: Response) => {
   const { name, email, password, photoBase64 } = req.body;
@@ -35,7 +85,7 @@ const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await user.comparePASSWORD(password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -75,4 +125,4 @@ const logoutUser = async (req: Request, res: Response) => {
   }
 };
 
-export { registerUser, loginUser, logoutUser };
+export { googleLogin, registerUser, loginUser, logoutUser };

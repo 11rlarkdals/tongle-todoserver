@@ -8,14 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Task = void 0;
 const typeorm_1 = require("typeorm");
 const todo_1 = require("./todo");
-const user_1 = __importDefault(require("./user"));
+const user_1 = require("./user");
 let Task = class Task extends typeorm_1.BaseEntity {
 };
 exports.Task = Task;
@@ -24,9 +21,9 @@ __decorate([
     __metadata("design:type", Number)
 ], Task.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_1.default, { onDelete: "CASCADE" }),
+    (0, typeorm_1.ManyToOne)(() => user_1.User, { onDelete: "CASCADE" }),
     (0, typeorm_1.JoinColumn)({ name: "userId" }),
-    __metadata("design:type", user_1.default)
+    __metadata("design:type", user_1.User)
 ], Task.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.Column)(),

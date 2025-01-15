@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import User from "./user";
+import { User } from "./user";
 import { Task } from "./task";
 
 @Entity()

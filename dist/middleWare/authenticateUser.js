@@ -17,7 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const redisClient_1 = require("../redisClient");
-const user_1 = __importDefault(require("../entities/user"));
+const user_1 = require("../entities/user");
 const authenticateUser = async (req, res, next) => {
     var _a;
     const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.replace("Bearer ", "");
@@ -30,7 +30,7 @@ const authenticateUser = async (req, res, next) => {
             return res.status(401).json({ message: "Token is blacklisted" });
         }
         const decoded = jsonwebtoken_1.default.verify(token, "your_jwt_secret");
-        const user = await user_1.default.findBy({ id: Number(decoded.id) });
+        const user = await user_1.User.findBy({ id: Number(decoded.id) });
         if (!user || user.length === 0) {
             return res.status(401).json({ message: "User not found" });
         }

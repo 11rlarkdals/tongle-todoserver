@@ -25,7 +25,7 @@ connectRedis()
     console.error("Error connecting to Redis:", err);
   });
 
-app.use(cors());
+app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:3003" }));
 
 app.get("/protected", authenticateUser, (req, res) => {
   res.json(req.user);

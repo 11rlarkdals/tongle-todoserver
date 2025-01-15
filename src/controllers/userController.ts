@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User, { Gender } from "../entities/user";
+import { Gender, User } from "../entities/user";
 
 interface UpdateUserData {
   name?: string;

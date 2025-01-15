@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../entities/user";
+import { User } from "../entities/user";
 import { Task } from "../entities/task";
 
 const getTasks = async (req: Request, res: Response) => {

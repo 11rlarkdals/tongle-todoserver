@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeTodo = exports.updateTodo = exports.getTodos = exports.createTodo = void 0;
 const todo_1 = require("../entities/todo");
-const user_1 = __importDefault(require("../entities/user"));
+const user_1 = require("../entities/user");
 const task_1 = require("../entities/task");
 const createTodo = async (req, res) => {
     var _a;
@@ -15,7 +12,7 @@ const createTodo = async (req, res) => {
         if (!task) {
             return res.status(400).json({ message: "Not found task" });
         }
-        const user = await user_1.default.findOne({ where: { id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id } });
+        const user = await user_1.User.findOne({ where: { id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id } });
         if (!user) {
             return res.status(400).json({ message: "Not found user" });
         }
@@ -36,7 +33,7 @@ exports.createTodo = createTodo;
 const getTodos = async (req, res) => {
     var _a;
     try {
-        const user = await user_1.default.findOne({ where: { id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id } });
+        const user = await user_1.User.findOne({ where: { id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id } });
         if (!user) {
             return res.status(400).json({ message: "Not found user" });
         }
@@ -53,7 +50,7 @@ const updateTodo = async (req, res) => {
     var _a;
     const { id, title, subTitle, isDone } = req.body;
     try {
-        const user = await user_1.default.findOneBy({ id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id });
+        const user = await user_1.User.findOneBy({ id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id });
         if (!user) {
             return res.status(400).json({ message: "Not found user" });
         }
@@ -84,7 +81,7 @@ const removeTodo = async (req, res) => {
     var _a;
     const { id } = req.body;
     try {
-        const user = await user_1.default.findOneBy({ id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id });
+        const user = await user_1.User.findOneBy({ id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id });
         if (!user) {
             return res.status(400).json({ message: "Not found user" });
         }
