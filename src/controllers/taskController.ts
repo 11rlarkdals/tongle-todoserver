@@ -46,7 +46,7 @@ const createTask = async (req: Request, res: Response) => {
     const { user: _, ...withoutUser } = task;
     return res
       .status(200)
-      .json({ message: "Todo created successfully", withoutUser });
+      .json({ message: "Task created successfully", withoutUser });
   } catch (error) {
     return res.status(500).json({ message: "Error creating task", error });
   }

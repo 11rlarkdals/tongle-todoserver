@@ -5,7 +5,7 @@ import { Task } from "./entities/task";
 
 const AppDataSource = new DataSource({
   type: "postgres",
-  url: process.env.POSTGRES_DATABASE_URL,
+  url: process.env.DATABASE_URL,
   // host: "localhost",
   // port: 5432,
   // username: process.env.USERNAME,
